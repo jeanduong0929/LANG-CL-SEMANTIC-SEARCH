@@ -16,18 +16,23 @@ This lab activity offers a streamlined, hands-on experience with ChromaDB, focus
 
 ## Lab Structure 
 1. Semantic Search Overview: A brief introduction to semantic search and its applications.
-2. Pre-configured ChromaDB Setup: Access a pre-setup environment where ChromaDB is already configured for use.
-3. Function Implementation Tasks:
+2. Function Implementation Tasks:
     - Implementing document addition with embeddings.
     - Crafting semantic search queries.
     - Handling query results and understanding their relevance.
 
 ## Setup Instructions
 1. Ensure Python and necessary tools are installed on your system.
-2. Install ChromaDB using pip:
+2. Install dependencies using pip or pip3:
 
 ```bash
-pip install chromadb
+pip install -r requirements.txt
+```
+
+or
+
+```bash
+pip3 install -r requirements.txt
 ```
 
 3.  Download and prepare the lab materials and datasets provided.
