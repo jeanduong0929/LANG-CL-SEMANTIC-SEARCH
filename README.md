@@ -39,8 +39,8 @@ pip install chromadb
 - Test different semantic queries and observe the effectiveness of your implementations.
 
 ## Support
-- For technical issues or detailed understanding, consult the ChromaDB documentation.
+- For technical issues or detailed understanding, consult the ChromaDB documentation. [ChromaDB](https://docs.trychroma.com/)
 - For additional guidance or inquiries, reach out to the lab coordinator or use the dedicated help forum.
 
 ## License
-This lab activity and its materials are provided under the XYZ License. They are intended for educational and training purposes.
+This lab activity and its materials are provided under the MIT License. They are intended for educational and training purposes.
