@@ -1,29 +1,26 @@
 # Python Lab Activity: Semantic Search with ChromaDB
 
-Lab Title: Mastering Semantic Search with ChromaDB in Python
+Purpose: Mastering Semantic Search with ChromaDB in Python
 
 ## Introduction
-This Python lab activity is designed to delve into the world of semantic search using ChromaDB. You will learn how to leverage ChromaDB's capabilities to build powerful semantic search systems. The lab focuses on understanding embeddings, creating and managing vector databases, and effectively utilizing semantic search techniques in AI applications.
+This lab activity offers a streamlined, hands-on experience with ChromaDB, focusing on implementing key functions for semantic search. The lab environment and essential code setup are already provided. Your task is to implement specific functions that enable semantic search capabilities, allowing you to dive directly into the core functionalities of ChromaDB.
 
 ## Objectives
-- Understand the fundamentals of semantic search and embeddings.
-- Set up ChromaDB in a Python environment for semantic search applications.
-- Create and manage collections specifically for semantic search.
-- Implement semantic search queries using ChromaDB.
-- Explore advanced features of ChromaDB to enhance search capabilities.
+- Implement and understand key functions in ChromaDB that facilitate semantic search.
+- Gain practical experience in handling semantic queries and understanding their results.
 
 ## Prerequisites
-- Basic to intermediate knowledge of Python programming.
-- Understanding of database concepts and vector databases.
-- Familiarity with AI and machine learning concepts, especially embeddings.
-- Python environment with the chromadb package installed.
+- Basic knowledge of Python programming.
+- Understanding of basic database operations.
+- Python environment with the ChromaDB package pre-installed.
 
-## Lab Structure
-1. Introduction to Semantic Search and Embeddings: Understand the theory behind semantic search and how embeddings are used.
-2. Setting up ChromaDB for Semantic Search: Learn to initialize ChromaDB for semantic search applications.
-3. Creating a Semantic Collection: Create a collection in ChromaDB tailored for semantic search.
-4. Implementing Semantic Queries: Conduct semantic search queries and analyze the results.
-5. Advanced Features and Techniques: Explore additional features of ChromaDB to refine and optimize semantic searches.
+## Lab Structure 
+1. Semantic Search Overview: A brief introduction to semantic search and its applications.
+2. Pre-configured ChromaDB Setup: Access a pre-setup environment where ChromaDB is already configured for use.
+3. Function Implementation Tasks:
+    - Implementing document addition with embeddings.
+    - Crafting semantic search queries.
+    - Handling query results and understanding their relevance.
 
 ## Setup Instructions
 1. Ensure Python and necessary tools are installed on your system.
