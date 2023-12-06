@@ -1,25 +1,81 @@
-import sys
-import os
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-import unittest  # noqa: E402
-from unittest.mock import MagicMock, patch  # noqa: E402
-from src.app import get_chromadb_collection, get_embeddings_from_csv  # noqa: E402
+import unittest
+from unittest.mock import MagicMock, mock_open, patch
+from src.app import (
+    get_chromadb_collection,
+    get_embeddings_from_csv,
+    read_file_from_folder,
+)
 
 
 class ChromaDBTests(unittest.TestCase):
+    @patch("os.path.dirname")
+    @patch("os.path.abspath")
+    @patch("os.listdir")
+    @patch(
+        "builtins.open", new_callable=mock_open, read_data="data1,data2\ndata3,data4"
+    )
+    def test_read_file_with_existing_csv(
+        self, mock_open, mock_listdir, mock_abspath, mock_dirname
+    ):
+        # Set the mock return values
+        mock_dirname.return_value = "/test"
+        mock_abspath.return_value = "/test"
+        mock_listdir.return_value = ["test.csv"]
+
+        # Call the function to get the actual values
+        result = read_file_from_folder("dummy_folder")
+
+        # Assert the actual values are the same as the expected values
+        self.assertEqual(result, [["data1", "data2"], ["data3", "data4"]])
+
+    @patch("os.path.dirname")
+    @patch("os.path.abspath")
+    @patch("os.listdir")
+    def test_read_file_folder_not_found(self, mock_listdir, mock_abspath, mock_dirname):
+        # Set the mock return values
+        mock_dirname.return_value = "/test"
+        mock_abspath.return_value = "/test"
+        mock_listdir.side_effect = FileNotFoundError
+
+        # Call the function to get the actual values
+        result = read_file_from_folder("nonexistent_folder")
+
+        # Assert the actual values are the same as the expected values
+        self.assertEqual(result, [])
+
+    @patch("os.path.dirname")
+    @patch("os.path.abspath")
+    @patch("os.listdir")
+    def test_read_file_no_csv_in_folder(self, mock_listdir, mock_abspath, mock_dirname):
+        # Set the mock return values
+        mock_dirname.return_value = "/test"
+        mock_abspath.return_value = "/test"
+        mock_listdir.return_value = ["test.txt", "test.doc"]
+
+        # Call the function to get the actual values
+        result = read_file_from_folder("empty_csv_folder")
+
+        # Assert the actual values are the same as the expected values
+        self.assertEqual(result, [])
+
     def test_get_embeddings_from_csv_valid_data(self):
+        # Set the test data
         test_data = [["ID", "Text"], ["1", "Document 1"], ["2", "Document 2"]]
+
+        # Set the expected return values
         expected_documents = ["Document 1", "Document 2"]
         expected_metadata = [{"item_id": "1"}, {"item_id": "2"}]
         expected_ids = ["1", "2"]
 
-        documents, metadata, ids = get_embeddings_from_csv(test_data)
+        # Call the function to get the actual values
+        acutal_documents, actual_metadata, actual_ids = get_embeddings_from_csv(
+            test_data
+        )
 
-        self.assertEqual(documents, expected_documents)
-        self.assertEqual(metadata, expected_metadata)
-        self.assertEqual(ids, expected_ids)
+        # Assert the actual values are the same as the expected values
+        self.assertEqual(acutal_documents, expected_documents)
+        self.assertEqual(actual_metadata, expected_metadata)
+        self.assertEqual(actual_ids, expected_ids)
 
     def test_get_embeddings_from_csv_incomplete_data(self):
         # Set the test data
