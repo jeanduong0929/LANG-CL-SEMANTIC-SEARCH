@@ -3,7 +3,85 @@ import csv
 import pprint
 import chromadb
 
-from typing import List
+from typing import List, Tuple
+
+# ------------------------------------------------------------------------------
+# TODO Functions - Implement the logic as per instructions
+# ------------------------------------------------------------------------------
+
+
+def get_embeddings_from_csv(
+    csv_file_data: List[List[str]],
+) -> Tuple[List[str], List[dict], List[str]]:
+    """
+    TODO: Implement this method to extract document texts, metadata, and generate unique IDs from the given CSV file data.
+    Each row in the CSV file represents a document. The first column is considered metadata (e.g., title or ID from the CSV),
+    and the second column is the document text.
+
+    Parameters:
+    file_data (list of lists): The content of the CSV file, where each inner list represents a line.
+
+    Returns:
+    tuple: A tuple containing three lists - documents (list of strings), metadatas (list of dictionaries), and ids (list of strings).
+
+    Instructions:
+    - Iterate over each line in file_data.
+    - Skip the first line if it contains headers.
+    - For each line, extract the first column as metadata (e.g., {"title": value}) and the second column as document text.
+    - Generate a unique ID for each document (e.g., using the line number).
+    """
+    # Implement your code here
+    raise NotImplementedError("This function is not yet implemented.")
+
+
+def get_chromadb_collection(
+    documents: List, metadatas: List, ids: List
+) -> chromadb.Collection:
+    """
+    TODO: Implement this method to initialize a ChromaDB collection named 'semantic-lab' and add the provided documents, metadata, and ids to it.
+    If a collection with the same name already exists, it should be deleted and a new one should be created.
+
+    Parameters:
+    documents (list): A list of document texts to add to the collection.
+    metadatas (list): A list of metadata dictionaries corresponding to the documents.
+    ids (list): A list of unique identifiers for the documents.
+
+    Returns:
+    chromadb.Collection: The initialized ChromaDB collection object.
+
+    Instructions:
+    - Create a new ChromaDB client.
+    - Check if a collection named 'semantic-lab' already exists. If it does, delete it.
+    - Create a new collection named 'semantic-lab'.
+    - Add the documents, metadatas, and ids to the collection using the collection.add method.
+    """
+    # Implement your code here
+    raise NotImplementedError("This function is not yet implemented.")
+
+
+def get_collection_query(user_input: str) -> chromadb.QueryResult:
+    """
+    TODO: Implement this method to query the 'semantic-lab' ChromaDB collection for documents that are semantically related to the given user input.
+
+    Parameters:
+    user_input (str): The user input to query the collection for.
+
+    Returns:
+    chromadb.QueryResult: The query result object containing the top 5 results.
+
+    Instructions:
+    - Retrieve the 'semantic-lab' collection from the ChromaDB client.
+    - Perform a query using the collection.query method with the provided user_input.
+    - Limit the number of results to 5 (n_results=5).
+    - Return the query result.
+    """
+    # Implement your code here
+    raise NotImplementedError("This function is not yet implemented.")
+
+
+# ------------------------------------------------------------------------------
+# Starter Code - TOUCH AT YOUR OWN RISK!
+# ------------------------------------------------------------------------------
 
 
 def clear_screen():
@@ -49,73 +127,6 @@ def read_file_from_folder(folder_name: str) -> List[List[str]]:
     return []
 
 
-def get_embeddings_from_csv(file_data: List[List[str]]) -> tuple:
-    """
-    Extracts document data, metadata, and IDs from the given CSV file data.
-
-    This function iterates over each line of the CSV file data (excluding the first line),
-    extracting the document text, metadata (item ID), and generating a unique ID for each line.
-    If a line does not have the required number of elements, it is skipped with a warning.
-
-    Parameters:
-    file_data (list of lists): The content of the CSV file, where each inner list represents a line.
-
-    Returns:
-    tuple: A tuple containing three lists - documents, metadatas, and ids.
-    """
-    documents = []
-    metadatas = []
-    ids = []
-
-    for i, line in enumerate(file_data):
-        if i == 0:
-            # Skip the first line
-            continue
-
-        # Check if the line has enough elements
-        if len(line) >= 2:
-            documents.append(line[1])
-            metadatas.append({"item_id": line[0]})
-            ids.append(str(i))
-        else:
-            print(
-                f"Warning: Line {i} in the CSV file is missing data and will be skipped."
-            )
-
-    return documents, metadatas, ids
-
-
-def get_chromadb_collection(
-    documents: List, metadatas: List, ids: List
-) -> chromadb.Collection:
-    """
-    Initializes a ChromaDB collection and adds documents, metadata, and ids to it.
-
-    This function creates a new ChromaDB collection named 'semantic-lab' and adds the provided
-    documents, metadatas, and ids to it. It returns the initialized ChromaDB collection object.
-
-    Parameters:
-    documents (list): A list of document texts to add to the collection.
-    metadatas (list): A list of metadata dictionaries corresponding to the documents.
-    ids (list): A list of unique identifiers for the documents.
-
-    Returns:
-    chromadb.Collection: The initialized and populated ChromaDB collection object.
-    """
-    chroma_client = chromadb.Client()
-
-    collection = chroma_client.create_collection(
-        name="semantic-lab",
-    )
-    collection.add(
-        documents=documents,
-        metadatas=metadatas,
-        ids=ids,
-    )
-
-    return collection
-
-
 def main():
     clear_screen()
 
@@ -141,7 +152,7 @@ def main():
             break
 
         # Query the collection
-        results = collection.query(query_texts=[user_input], n_results=5)
+        results = get_collection_query(user_input)
 
         # Print the results
         # Note: Remove the 'documents' key if you don't want to print only documents
