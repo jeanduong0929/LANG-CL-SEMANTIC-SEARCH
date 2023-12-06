@@ -1,82 +1,153 @@
+import os
+import csv
+import pprint
 import chromadb
 
+from typing import List
 
-def get_chromadb_collection():
+
+def clear_screen():
     """
-    Initializes a collection named 'test' in the chromadb database.
-    If the collection already exists, it is deleted and then recreated.
-    This ensures that a fresh instance of the collection is always available
-    at the start of this function. The created collection is then returned.
+    Clears the terminal screen.
+
+    This function uses a system call to clear the terminal screen. The command
+    differs depending on the operating system: 'cls' for Windows ('nt') and 'clear'
+    for Unix/Linux.
+    """
+    os.system("cls" if os.name == "nt" else "clear")
+
+
+def read_file_from_folder(folder_name: str) -> List[List[str]]:
+    """
+    Reads the first .csv file from a specified folder and returns its content.
+
+    The function constructs an absolute path to the specified folder, relative
+    to the script's location. It then reads the first CSV file found in this folder
+    and returns its contents as a list of rows.
+
+    Parameters:
+    folder_name (str): The name of the folder from which to read the .csv file.
+
+    Returns:
+    list: A list of rows from the CSV file, where each row is represented as a list.
+    """
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    folder_path = os.path.join(script_dir, "..", folder_name)
+
+    # Check if the folder contains any files
+    try:
+        file_name = next(
+            (f for f in os.listdir(folder_path) if f.endswith(".csv")), None
+        )
+    except FileNotFoundError:
+        return []
+
+    if file_name:
+        with open(os.path.join(folder_path, file_name)) as file:
+            return list(csv.reader(file))
+
+    return []
+
+
+def get_embeddings_from_csv(file_data: List[List[str]]) -> tuple:
+    """
+    Extracts document data, metadata, and IDs from the given CSV file data.
+
+    This function iterates over each line of the CSV file data (excluding the first line),
+    extracting the document text, metadata (item ID), and generating a unique ID for each line.
+    If a line does not have the required number of elements, it is skipped with a warning.
+
+    Parameters:
+    file_data (list of lists): The content of the CSV file, where each inner list represents a line.
+
+    Returns:
+    tuple: A tuple containing three lists - documents, metadatas, and ids.
+    """
+    documents = []
+    metadatas = []
+    ids = []
+
+    for i, line in enumerate(file_data):
+        if i == 0:
+            # Skip the first line
+            continue
+
+        # Check if the line has enough elements
+        if len(line) >= 2:
+            documents.append(line[1])
+            metadatas.append({"item_id": line[0]})
+            ids.append(str(i))
+        else:
+            print(
+                f"Warning: Line {i} in the CSV file is missing data and will be skipped."
+            )
+
+    return documents, metadatas, ids
+
+
+def get_chromadb_collection(
+    documents: List, metadatas: List, ids: List
+) -> chromadb.Collection:
+    """
+    Initializes a ChromaDB collection and adds documents, metadata, and ids to it.
+
+    This function creates a new ChromaDB collection named 'semantic-lab' and adds the provided
+    documents, metadatas, and ids to it. It returns the initialized ChromaDB collection object.
+
+    Parameters:
+    documents (list): A list of document texts to add to the collection.
+    metadatas (list): A list of metadata dictionaries corresponding to the documents.
+    ids (list): A list of unique identifiers for the documents.
+
+    Returns:
+    chromadb.Collection: The initialized and populated ChromaDB collection object.
     """
     chroma_client = chromadb.Client()
 
-    if "test" in chroma_client.list_collections():
-        chroma_client.delete_collection(
-            name="test",
-        )
     collection = chroma_client.create_collection(
-        name="test", metadata={"placeholder": "placeholder"}
+        name="semantic-lab",
+    )
+    collection.add(
+        documents=documents,
+        metadatas=metadatas,
+        ids=ids,
     )
 
     return collection
 
 
-# TODO: Implement a function to add documents with embeddings to the collection
-def add_documents_with_embeddings(collection, documents, embeddings):
-    """
-    Adds documents along with their embeddings to the given collection.
-    Parameters:
-        collection: The ChromaDB collection to add documents to.
-        documents: A list of documents (text data).
-        embeddings: A list of embeddings corresponding to the documents.
-    """
-    # Implement the logic to add documents with embeddings here
-    pass
-
-
-# TODO: Implement a function to perform a semantic search query
-def perform_semantic_search(collection, query_text, n_results):
-    """
-    Performs a semantic search query on the collection and returns the results.
-    Parameters:
-        collection: The ChromaDB collection to query.
-        query_text: The text to query for.
-        n_results: Number of results to return.
-    Returns:
-        List of documents or embeddings that match the query.
-    """
-    # Implement the semantic search query logic here
-    pass
-
-
-# TODO: Implement a function to process and display query results
-def process_query_results(results):
-    """
-    Processes and displays the results of a semantic search query.
-    Parameters:
-        results: The results from a semantic search query.
-    """
-    # Implement the logic to process and display the results here
-    pass
-
-
 def main():
-    collection = get_chromadb_collection()
+    clear_screen()
 
-    # Example data (You can replace this with real data)
-    example_documents = ["Document 1 text", "Document 2 text"]
-    example_embeddings = [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]  # Dummy embeddings
+    print("Embeddings...\n")
 
-    # Adding documents to the collection
-    add_documents_with_embeddings(collection, example_documents, example_embeddings)
+    # Read the files from the resources folder
+    file_data = read_file_from_folder("resources")
 
-    # Performing a semantic search
-    query_text = "example query"
-    n_results = 5
-    results = perform_semantic_search(collection, query_text, n_results)
+    # Get the embeddings from the csv files
+    documents, metadatas, ids = get_embeddings_from_csv(file_data)
 
-    # Processing the query results
-    process_query_results(results)
+    # Initializing the collection
+    collection = get_chromadb_collection(documents, metadatas, ids)
+
+    while True:
+        clear_screen()
+
+        # Get user input
+        user_input = input("Search menu item (x to cancel): ")
+
+        # Check if the user wants to exit
+        if user_input == "x":
+            break
+
+        # Query the collection
+        results = collection.query(query_texts=[user_input], n_results=5)
+
+        # Print the results
+        # Note: Remove the 'documents' key if you don't want to print only documents
+        pprint.pprint(results["documents"])
+
+        input("\nPress enter to continue...")
 
 
 if __name__ == "__main__":
