@@ -145,7 +145,7 @@ def main():
         clear_screen()
 
         # Get user input
-        user_input = input("Search menu item (x to cancel): ")
+        user_input = input("What are your taste buds craving today? (x to cancel): ")
 
         # Check if the user wants to exit
         if user_input == "x":
