@@ -42,7 +42,7 @@ In this lab, you will engage with ChromaDB to implement and explore semantic sea
 
 ## Lab Instructions
 - Complete the 'TODO' methods as outlined in the lab documents.
-- To successfully finish the lab, pass all tests in the tests/lab_test file.
+- To successfully finish the lab, pass all tests in the tests/test_lab.py file.
 - Run the application or tests using your editor, or use the provided run scripts.
 
 ### Running Scripts
