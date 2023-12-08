@@ -40,6 +40,26 @@ Semantic Search: Semantic search, in contrast, delves into the context and seman
 
 In this lab, you will engage with ChromaDB to implement and explore semantic search functionality. The lab's highlight is embedding a restaurant menu from a CSV file into a ChromaDB collection and then querying this data semantically. This process will involve generating embeddings from NLP models, enabling you to create a system that understands the semantic content of both the search queries and the menu items in your database. This approach aims to yield more meaningful and contextually relevant search results, showcasing the effectiveness of semantic search in practical applications.
 
+## Lab Instructions
+- Complete the 'TODO' methods as outlined in the lab documents.
+- To successfully finish the lab, pass all tests in the tests/lab_test file.
+- Run the application or tests using your editor, or use the provided run scripts.
+
+### Running Scripts
+To run a shell script in Unix/Linux/Mac environments, use the command:
+
+```
+./run_script.sh
+````
+
+Make sure the script has execute permissions. If not, run chmod +x run_script.sh first.
+
+To run a batch script in Windows, simply execute:
+
+```
+run_script.bat
+```
+
 ## Support
 - For technical issues or detailed understanding, consult the [ChromaDB documentation](https://docs.trychroma.com/).
 - For additional guidance or inquiries, reach out to the lab coordinator or use the dedicated help forum.
