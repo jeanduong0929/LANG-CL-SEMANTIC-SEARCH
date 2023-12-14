@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, mock_open, patch
-from src.app import (
+from src.main.app import (
     get_chromadb_collection,
     get_embeddings_from_csv,
     read_file_from_folder,
